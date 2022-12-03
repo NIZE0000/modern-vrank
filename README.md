@@ -1,6 +1,6 @@
 # modern-vrank
 
-recreat vtuber ranking with modern design.
+recreate vtuber ranking with modern design.
 
 technology base on this repository
 server side: 
