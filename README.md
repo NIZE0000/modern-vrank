@@ -3,7 +3,7 @@
 recreate vtuber ranking with modern design.
 
 technology base on this repository
-server side: 
+server api: 
 - go language
 - mongoDB
 - docker
