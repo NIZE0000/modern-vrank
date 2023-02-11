@@ -1,33 +1,33 @@
 package models
 
 type Vtuber struct {
-	id                string
-	youtubeId         string
-	playlistId        string
-	title             string
-	description       string
-	subscriptionCount string
-	publishedAt       string
-	thumbnails        Thumbnail
-	statistics        Statistic
+	ID                string `json:"id"`
+	YoutubeId         string `json:"youtubeId"`
+	PlaylistId        string `json:"playlistId"`
+	Title             string `json:"title"`
+	Description       string `json:"description"`
+	SubscriptionCount string `json:"subscriptionCount"`
+	PublishedAt       string `json:"publishedAt"`
+	Thumbnails        Thumbnail
+	Statistics        Statistic
 }
 
 type Thumbnail struct {
 	small struct {
-		url string
+		Url string `json:"url"`
 	}
 	medium struct {
-		url string
+		Url string `json:"url"`
 	}
 	high struct {
-		url string
+		Url string `json:"url"`
 	}
 }
 
 type Statistic struct {
-	viewCount     int
-	likeCount     int
-	dislikeCount  int
-	favoriteCount int
-	commentCount  int
+	ViewCount     int `json:"viewCount"`
+	LikeCount     int `json:"likeCount"`
+	DislikeCount  int `json:"dislikeCount"`
+	FavoriteCount int `json:"favoriteCount"`
+	CommentCount  int `json:"commentCount`
 }

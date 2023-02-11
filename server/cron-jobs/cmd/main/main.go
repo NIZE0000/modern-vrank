@@ -5,7 +5,12 @@ import (
 	"log"
 	"os"
 
+	// "time"
+
+	// "github.com/go-co-op/gocron"
 	"github.com/joho/godotenv"
+
+	"cron-jobs/tasks"
 )
 
 // init is invoked before main()
@@ -18,16 +23,12 @@ func init() {
 
 func main() {
 	// Get the GITHUB_USERNAME environment variable
-	githubUsername, exists := os.LookupEnv("GOOGLE_API_KEY")
+	googleAPIKey, exists := os.LookupEnv("GOOGLE_API_KEY")
 
 	if exists {
-		fmt.Println(githubUsername)
+		fmt.Println(googleAPIKey)
 	}
 
-	// Get the GITHUB_API_KEY environment variable
-	githubAPIKey, exists := os.LookupEnv("GITHUB_API_KEY")
+	tasks.VideoStatusAPI(googleAPIKey)
 
-	if exists {
-		fmt.Println(githubAPIKey)
-	}
 }
