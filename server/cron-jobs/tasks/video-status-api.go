@@ -7,41 +7,91 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
+	"time"
 )
 
 type Video struct {
-	Title string   `json:"title"`
-	Tags  []string `json:"tags"`
+	Kind  string `json:"kind"`
+	Etag  string `json:"etag"`
+	Items []struct {
+		Kind    string `json:"kind"`
+		Etag    string `json:"etag"`
+		ID      string `json:"id"`
+		Snippet struct {
+			PublishedAt time.Time `json:"publishedAt"`
+			ChannelID   string    `json:"channelId"`
+			Title       string    `json:"title"`
+			Description string    `json:"description"`
+			Thumbnails  struct {
+				Default struct {
+					URL    string `json:"url"`
+					Width  int    `json:"width"`
+					Height int    `json:"height"`
+				} `json:"default"`
+				Medium struct {
+					URL    string `json:"url"`
+					Width  int    `json:"width"`
+					Height int    `json:"height"`
+				} `json:"medium"`
+				High struct {
+					URL    string `json:"url"`
+					Width  int    `json:"width"`
+					Height int    `json:"height"`
+				} `json:"high"`
+				Standard struct {
+					URL    string `json:"url"`
+					Width  int    `json:"width"`
+					Height int    `json:"height"`
+				} `json:"standard"`
+				Maxres struct {
+					URL    string `json:"url"`
+					Width  int    `json:"width"`
+					Height int    `json:"height"`
+				} `json:"maxres"`
+			} `json:"thumbnails"`
+			ChannelTitle         string   `json:"channelTitle"`
+			Tags                 []string `json:"tags"`
+			CategoryID           string   `json:"categoryId"`
+			LiveBroadcastContent string   `json:"liveBroadcastContent"`
+			Localized            struct {
+				Title       string `json:"title"`
+				Description string `json:"description"`
+			} `json:"localized"`
+			DefaultAudioLanguage string `json:"defaultAudioLanguage"`
+		} `json:"snippet"`
+	} `json:"items"`
+	PageInfo struct {
+		TotalResults   int `json:"totalResults"`
+		ResultsPerPage int `json:"resultsPerPage"`
+	} `json:"pageInfo"`
 }
 
 func VideoStatusAPI(API string) {
 
 	videoId := "AROi9sNCVKs"
 
-	response, err := http.Get(fmt.Sprintf("https://www.googleapis.com/youtube/v3/videos?part=snippet&id=%v&key=%v", videoId, API))
+	// Define the API endpoint and query parameters
+	endpoint := "https://www.googleapis.com/youtube/v3/videos"
+	params := url.Values{}
+	params.Add("part", "snippet")
+	params.Add("id", videoId)
+	params.Add("key", API)
+	url := endpoint + "?" + params.Encode()
+
+	// Send a GET request to the API endpoint
+	res, err := http.Get(url)
 	if err != nil {
-		panic(err)
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		panic(err)
+		fmt.Printf("The HTTP request failed with error %s\n", err)
 	}
 
-	var data struct {
-		// Snippet []string `json:"snippet"`
-		Items []Video `json:"items"`
-	}
+	// Read the response body
+	data, _ := ioutil.ReadAll(res.Body)
 
-	if err := json.Unmarshal(body, &data); err != nil {
-		panic(err)
-	}
+	// Unmarshal the JSON data into a Go struct
+	var video Video
+	json.Unmarshal(data, &video)
 
-	fmt.Println(data)
-
-	// for _, item := range data.Items {
-	// 	fmt.Println("Title:", item.Title)
-	// 	fmt.Println("Tags:", item.Tags)
-	// }
+	// Print the video information
+	fmt.Printf("Video ID: %s\n", video.Kind)
 }
