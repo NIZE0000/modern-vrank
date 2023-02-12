@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -11,6 +12,9 @@ import (
 	"github.com/joho/godotenv"
 
 	"cron-jobs/tasks"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // init is invoked before main()
@@ -22,12 +26,25 @@ func init() {
 }
 
 func main() {
-	// Get the GITHUB_USERNAME environment variable
+	// Get the GOOGLE_API_KEY environment variable
 	googleAPIKey, exists := os.LookupEnv("GOOGLE_API_KEY")
 
 	if exists {
-		fmt.Println(googleAPIKey)
+		fmt.Println("GOOGLE_API_KEY: ", googleAPIKey)
 	}
 
+	// Connect to the MongoDB server
+	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = client.Connect(context.TODO())
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(client)
+	defer client.Disconnect(context.TODO())
+
 	tasks.VideoStatusAPI(googleAPIKey)
+
 }
