@@ -1,6 +1,6 @@
 package models
 
 type Video struct {
-	id         string
+	ID         string
 	playlistId string
 }
