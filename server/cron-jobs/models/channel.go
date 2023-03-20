@@ -1,9 +1,14 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 // Database maping
 type ChannelModel struct {
+	ID          string `bson:"_id,omitempty"`
 	ChannelId   string
 	Title       string
 	Description string
@@ -28,6 +33,7 @@ type ChannelModel struct {
 		HiddenSubscriberCount bool
 		VideoCount            string
 	}
+	UpdateAt primitive.DateTime
 }
 
 // Json maping

@@ -15,7 +15,7 @@ import (
 
 // init is invoked before main()
 func init() {
-	// loads values from .env into the system
+	// loads values from .env into the system environment
 	if err := godotenv.Load("/home/nice/Workspace/modern-vrank/.env"); err != nil {
 		log.Print("No .env file found")
 	}
