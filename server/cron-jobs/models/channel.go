@@ -4,6 +4,30 @@ import "time"
 
 // Database maping
 type ChannelModel struct {
+	ChannelId   string
+	Title       string
+	Description string
+	Thumbnails  struct {
+		Default struct {
+			URL string
+		}
+		Medium struct {
+			URL string
+		}
+		High struct {
+			URL string
+		}
+	}
+	Localized struct {
+		Title       string
+		Description string
+	}
+	Statistics struct {
+		ViewCount             string
+		SubscriberCount       string
+		HiddenSubscriberCount bool
+		VideoCount            string
+	}
 }
 
 // Json maping
@@ -45,5 +69,11 @@ type ChannelJson struct {
 				Description string `json:"description"`
 			} `json:"localized"`
 		} `json:"snippet"`
+		Statistics struct {
+			ViewCount             string `json:"viewCount"`
+			SubscriberCount       string `json:"subscriberCount"`
+			HiddenSubscriberCount bool   `json:"hiddenSubscriberCount"`
+			VideoCount            string `json:"videoCount"`
+		} `json:"statistics"`
 	} `json:"items"`
 }

@@ -3,45 +3,38 @@
 package tasks
 
 import (
-	"context"
 	"cron-jobs/models"
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
-
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-func init() {
-	// Connect to the MongoDB server
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = client.Connect(context.TODO())
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(client)
-	defer client.Disconnect(context.TODO())
-}
 
 func ChannelInfo(API string) {
 
+	// // connect to mongo database
+	// _, db, err := modules.ConnectDB()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// // define collection
+	// collection := db.Collection("channel")
+
+	// will separate to 50 per batch size
 	channelList := []string{"UC6KTB79XRwx_iwxnrIEvHQA", "UC72_UWR1CAQhC-Kg48e5mjA", "UC6Ea68DSHlXrcy9uIw4oUIg"}
 
 	// Define the API endpoint and query parameters
 	endpoint := "https://www.googleapis.com/youtube/v3/channels"
-	params := url.Values{}
-	params.Add("part", "snippet")
-	params.Add("key", API)
 
 	// get channelId from list
 	for _, channelId := range channelList {
+
+		// set query parameters
+		params := url.Values{}
+		params.Add("part", "snippet,statistics")
+		params.Add("key", API)
 		params.Add("id", channelId)
 		url := endpoint + "?" + params.Encode()
 
@@ -55,12 +48,18 @@ func ChannelInfo(API string) {
 		data, _ := io.ReadAll(res.Body)
 
 		// Unmarshal the JSON data into a Go struct
-		var video models.VideoJson
-		json.Unmarshal(data, &video)
+		var channel models.ChannelJson
+		json.Unmarshal(data, &channel)
 
 		// Print the video information
-		fmt.Printf("Video ID: %s\n", video.Items[0].ID)
+		fmt.Printf("Channel ID: %s\n", channel.Items[0].ID)
 
 	}
 
+	// // insert document
+	// result, err := collection.InsertOne(context.Background(), bson.M{"name": "John Doe", "age": 30})
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println("Inserted document with ID:", result.InsertedID)
 }
