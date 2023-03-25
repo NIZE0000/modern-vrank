@@ -2,7 +2,6 @@ package modules
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,10 +11,7 @@ import (
 func ConnectDB() (*mongo.Client, *mongo.Database, error) {
 
 	// Get the MONGO_URI form environment variable
-	mongoURI, exists := os.LookupEnv("MONGO_URI")
-	if exists {
-		fmt.Println("MONGO_URI: ", mongoURI)
-	}
+	mongoURI, _ := os.LookupEnv("MONGO_URI")
 
 	// Set client options
 	clientOptions := options.Client().ApplyURI(mongoURI)

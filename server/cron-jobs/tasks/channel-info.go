@@ -30,8 +30,33 @@ func ChannelInfo(API string) {
 	// define collection
 	collection := db.Collection("channel")
 
-	// will separate to 50 per batch size
-	channelList := []string{"UC6KTB79XRwx_iwxnrIEvHQA", "UC72_UWR1CAQhC-Kg48e5mjA", "UC6Ea68DSHlXrcy9uIw4oUIg"}
+	//precalculate outdate time
+	lastDay := time.Now().Truncate(24 * time.Hour)
+	fmt.Printf("Timestamp of today's start: %d\n", lastDay)
+
+	// filter
+	filter := bson.M{"updateAt": bson.M{"$lt": lastDay}}
+	// set limit to 50
+	opts := options.Find().SetLimit(50)
+
+	// read the documents
+	channel, err := collection.Find(context.TODO(), filter, opts)
+	if err != nil {
+		panic(err)
+	}
+	// prepare data to pointer variable
+	var channelDocs []models.ChannelModel
+	if err = channel.All(context.TODO(), &channelDocs); err != nil {
+		panic(err)
+	}
+
+	// 50 channels per batch
+	var channelList []string
+	for _, result := range channelDocs {
+		res, _ := json.Marshal(result.ID)
+		channelList = append(channelList, string(res))
+	}
+	fmt.Println("Channels batch size: ", len(channelList))
 
 	// Define the API endpoint and query parameters
 	endpoint := "https://www.googleapis.com/youtube/v3/channels"
@@ -59,36 +84,27 @@ func ChannelInfo(API string) {
 		var channelJson models.ChannelJson
 		json.Unmarshal(data, &channelJson)
 
+		// define variable for mapping json data
+		var channelModel models.ChannelModel
 		// map json to struct
-		channelModel := models.ChannelModel{
-			ID:          channelJson.Items[0].ID,
-			ChannelId:   channelJson.Items[0].ID,
-			Title:       channelJson.Items[0].Snippet.Title,
-			Description: channelJson.Items[0].Snippet.Description,
-			Thumbnails: struct {
-				Default struct{ URL string }
-				Medium  struct{ URL string }
-				High    struct{ URL string }
-			}{Default: struct{ URL string }{URL: channelJson.Items[0].Snippet.Thumbnails.Default.URL},
-				Medium: struct{ URL string }{URL: channelJson.Items[0].Snippet.Thumbnails.Medium.URL},
-				High:   struct{ URL string }{URL: channelJson.Items[0].Snippet.Thumbnails.High.URL}},
-			Localized: struct {
-				Title       string
-				Description string
-			}{Title: channelJson.Items[0].Snippet.Localized.Title, Description: channelJson.Items[0].Snippet.Localized.Description},
-			Statistics: struct {
-				ViewCount             string
-				SubscriberCount       string
-				HiddenSubscriberCount bool
-				VideoCount            string
-			}{
-				ViewCount:             channelJson.Items[0].Statistics.ViewCount,
-				SubscriberCount:       channelJson.Items[0].Statistics.SubscriberCount,
-				HiddenSubscriberCount: channelJson.Items[0].Statistics.HiddenSubscriberCount,
-				VideoCount:            channelJson.Items[0].Statistics.VideoCount,
-			},
-			UpdateAt: primitive.NewDateTimeFromTime(time.Now()),
-		}
+		channelModel.ID = channelJson.Items[0].ID
+		channelModel.ChannelID = channelJson.Items[0].ID
+		channelModel.Title = channelJson.Items[0].Snippet.Title
+		channelModel.Description = channelJson.Items[0].Snippet.Description
+		// Map thumbnails
+		channelModel.Thumbnails.Default.URL = channelJson.Items[0].Snippet.Thumbnails.Default.URL
+		channelModel.Thumbnails.Medium.URL = channelJson.Items[0].Snippet.Thumbnails.Medium.URL
+		channelModel.Thumbnails.High.URL = channelJson.Items[0].Snippet.Thumbnails.High.URL
+		// Map localized
+		channelModel.Localized.Title = channelJson.Items[0].Snippet.Localized.Title
+		channelModel.Localized.Description = channelJson.Items[0].Snippet.Localized.Description
+		// Map statistics
+		channelModel.Statistics.ViewCount = channelJson.Items[0].Statistics.ViewCount
+		channelModel.Statistics.SubscriberCount = channelJson.Items[0].Statistics.SubscriberCount
+		channelModel.Statistics.HiddenSubscriberCount = channelJson.Items[0].Statistics.HiddenSubscriberCount
+		channelModel.Statistics.VideoCount = channelJson.Items[0].Statistics.VideoCount
+		// Timestamp
+		channelModel.UpdateAt = primitive.NewDateTimeFromTime(time.Now())
 
 		// Define the filter to use for the update operation
 		filter := bson.M{"_id": channelId}

@@ -9,31 +9,31 @@ import (
 // Database maping
 type ChannelModel struct {
 	ID          string `bson:"_id,omitempty"`
-	ChannelId   string
-	Title       string
-	Description string
+	ChannelID   string `bson:"channelId,omitempty"`
+	Title       string `bson:"title,omitempty"`
+	Description string `bson:"description,omitempty"`
 	Thumbnails  struct {
 		Default struct {
-			URL string
-		}
+			URL string `bson:"url,omitempty"`
+		} `bson:"default,omitempty"`
 		Medium struct {
-			URL string
-		}
+			URL string `bson:"url,omitempty"`
+		} `bson:"medium,omitempty"`
 		High struct {
-			URL string
-		}
-	}
+			URL string `bson:"url,omitempty"`
+		} `bson:"high,omitempty"`
+	} `bson:"thumbnails,omitempty"`
 	Localized struct {
-		Title       string
-		Description string
-	}
+		Title       string `bson:"title,omitempty"`
+		Description string `bson:"description,omitempty"`
+	} `bson:"localized,omitempty"`
 	Statistics struct {
-		ViewCount             string
-		SubscriberCount       string
-		HiddenSubscriberCount bool
-		VideoCount            string
-	}
-	UpdateAt primitive.DateTime
+		ViewCount             string `bson:"viewCount,omitempty"`
+		SubscriberCount       string `bson:"subscriberCount,omitempty"`
+		HiddenSubscriberCount bool   `bson:"hiddenSubscriberCount,omitempty"`
+		VideoCount            string `bson:"videoCount,omitempty"`
+	} `bson:"statistics,omitempty"`
+	UpdateAt primitive.DateTime `bson:"updateAt,omitempty"`
 }
 
 // Json maping

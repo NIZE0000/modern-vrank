@@ -19,14 +19,26 @@ func init() {
 	if err := godotenv.Load("/home/nice/Workspace/modern-vrank/.env"); err != nil {
 		log.Print("No .env file found")
 	}
-}
 
-func main() {
+	// Get the MONGO_URI form environment variable
+	mongoURI, exists := os.LookupEnv("MONGO_URI")
+	if exists {
+		fmt.Println("MONGO_URI: ", mongoURI)
+	} else {
+		fmt.Println("MONGO_URI: Not found")
+	}
 	// Get the GOOGLE_API_KEY form environment variable
 	googleAPIKey, exists := os.LookupEnv("GOOGLE_API_KEY")
 	if exists {
 		fmt.Println("GOOGLE_API_KEY: ", googleAPIKey)
+	} else {
+		fmt.Println("GOOGLE_API_KEY: Not found")
+
 	}
+}
+
+func main() {
+	googleAPIKey, _ := os.LookupEnv("GOOGLE_API_KEY")
 
 	//run script to fetch the data
 	tasks.ChannelInfo(googleAPIKey)
