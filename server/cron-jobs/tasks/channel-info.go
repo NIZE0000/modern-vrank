@@ -34,9 +34,9 @@ func ChannelInfo(API string) {
 	lastDay := time.Now().Truncate(24 * time.Hour)
 	fmt.Printf("Timestamp of today's start: %d\n", lastDay)
 
-	// filter
+	// filter outdate time
 	filter := bson.M{"updateAt": bson.M{"$lt": lastDay}}
-	// set limit to 50
+	// set docs limit to 50
 	opts := options.Find().SetLimit(50)
 
 	// read the documents
@@ -51,18 +51,23 @@ func ChannelInfo(API string) {
 	}
 
 	// 50 channels per batch
-	var channelList []string
+	var channelLists []string
 	for _, result := range channelDocs {
-		res, _ := json.Marshal(result.ID)
-		channelList = append(channelList, string(res))
+		res, err := json.Marshal(result.ID)
+		channelLists = append(channelLists, string(res))
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
-	fmt.Println("Channels batch size: ", len(channelList))
+	fmt.Println("Channels Batch Size: ", len(channelLists))
 
 	// Define the API endpoint and query parameters
 	endpoint := "https://www.googleapis.com/youtube/v3/channels"
 
-	// get channelId from list
-	for _, channelId := range channelList {
+	// get channelId from lists
+	for i := 0; i < len(channelLists); i++ {
+
+		channelId := channelLists[i]
 
 		// set query parameters
 		params := url.Values{}
