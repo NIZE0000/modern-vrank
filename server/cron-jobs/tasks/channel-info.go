@@ -113,5 +113,6 @@ func ChannelInfo(API string) {
 		} else {
 			fmt.Println("Existing document updated!")
 		}
+
 	}
 }
