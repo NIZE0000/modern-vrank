@@ -69,13 +69,13 @@ func ChannelInfo(API string) {
 	// get channelId from lists
 	for i := 0; i < len(channelLists); i++ {
 
-		channelId := channelLists[i]
+		channelId := strings.Trim(channelLists[i], "\"")
 
 		// set query parameters
 		params := url.Values{}
 		params.Add("part", "snippet,statistics")
 		params.Add("key", API)
-		params.Add("id", strings.Trim(channelId, "\""))
+		params.Add("id", channelId)
 		url := endpoint + "?" + params.Encode()
 
 		// Send a GET request to the API endpoint
@@ -119,8 +119,7 @@ func ChannelInfo(API string) {
 		update := bson.M{"$set": channelModel}
 
 		// Define the options for the update operation
-		upsert := true
-		options := options.Update().SetUpsert(upsert)
+		options := options.Update().SetUpsert(true)
 
 		// insert document
 		result, err := collection.UpdateByID(context.TODO(), channelId, update, options)
