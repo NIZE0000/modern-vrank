@@ -12,6 +12,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -50,8 +51,8 @@ func ChannelInfo(API string) {
 		panic(err)
 	}
 
-	// 50 channels per batch
-	var channelLists []string
+	// split 50 channels per batch
+	channelLists := make([]string, 0)
 	for _, result := range channelDocs {
 		res, err := json.Marshal(result.ID)
 		channelLists = append(channelLists, string(res))
@@ -60,6 +61,7 @@ func ChannelInfo(API string) {
 		}
 	}
 	fmt.Println("Channels Batch Size: ", len(channelLists))
+	fmt.Println(channelLists)
 
 	// Define the API endpoint and query parameters
 	endpoint := "https://www.googleapis.com/youtube/v3/channels"
@@ -73,7 +75,7 @@ func ChannelInfo(API string) {
 		params := url.Values{}
 		params.Add("part", "snippet,statistics")
 		params.Add("key", API)
-		params.Add("id", channelId)
+		params.Add("id", strings.Trim(channelId, "\""))
 		url := endpoint + "?" + params.Encode()
 
 		// Send a GET request to the API endpoint
@@ -87,12 +89,14 @@ func ChannelInfo(API string) {
 
 		// Unmarshal the JSON data into a Go struct
 		var channelJson models.ChannelJson
-		json.Unmarshal(data, &channelJson)
+		if err := json.Unmarshal(data, &channelJson); err != nil {
+			log.Fatal(err)
+		}
 
 		// define variable for mapping json data
 		var channelModel models.ChannelModel
 		// map json to struct
-		channelModel.ID = channelJson.Items[0].ID
+		// channelModel.ID = channelJson.Items[0].ID
 		channelModel.ChannelID = channelJson.Items[0].ID
 		channelModel.Title = channelJson.Items[0].Snippet.Title
 		channelModel.Description = channelJson.Items[0].Snippet.Description
@@ -111,9 +115,6 @@ func ChannelInfo(API string) {
 		// Timestamp
 		channelModel.UpdateAt = primitive.NewDateTimeFromTime(time.Now())
 
-		// Define the filter to use for the update operation
-		filter := bson.M{"_id": channelId}
-
 		// Define the update to apply if the document exists
 		update := bson.M{"$set": channelModel}
 
@@ -122,7 +123,7 @@ func ChannelInfo(API string) {
 		options := options.Update().SetUpsert(upsert)
 
 		// insert document
-		result, err := collection.UpdateOne(context.Background(), filter, update, options)
+		result, err := collection.UpdateByID(context.TODO(), channelId, update, options)
 		if err != nil {
 			fmt.Println(err)
 			return
