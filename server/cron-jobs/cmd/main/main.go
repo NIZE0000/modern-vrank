@@ -13,6 +13,8 @@ import (
 	"cron-jobs/tasks"
 )
 
+var googleAPIKey string
+
 // init is invoked before main()
 func init() {
 	// loads values from .env into the system environment

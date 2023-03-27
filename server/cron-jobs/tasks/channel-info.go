@@ -29,11 +29,12 @@ func ChannelInfo(API string) {
 	}
 
 	// define collection
-	collection := db.Collection("channel")
+	channelCollection := db.Collection("channel")
+	statsCollection := db.Collection("stats")
 
 	//precalculate outdate time
 	lastDay := time.Now().Truncate(24 * time.Hour)
-	fmt.Printf("Timestamp of today's start: %d\n", lastDay)
+	fmt.Printf("Timestamp of date's start: %d\n", lastDay.Day())
 
 	// filter outdate time
 	filter := bson.M{"updateAt": bson.M{"$lt": lastDay}}
@@ -41,13 +42,13 @@ func ChannelInfo(API string) {
 	opts := options.Find().SetLimit(50)
 
 	// read the documents
-	channel, err := collection.Find(context.TODO(), filter, opts)
+	result, err := channelCollection.Find(context.TODO(), filter, opts)
 	if err != nil {
 		panic(err)
 	}
 	// prepare data to pointer variable
 	var channelDocs []models.ChannelModel
-	if err = channel.All(context.TODO(), &channelDocs); err != nil {
+	if err = result.All(context.TODO(), &channelDocs); err != nil {
 		panic(err)
 	}
 
@@ -122,7 +123,7 @@ func ChannelInfo(API string) {
 		options := options.Update().SetUpsert(true)
 
 		// insert document
-		result, err := collection.UpdateByID(context.TODO(), channelId, update, options)
+		result, err := channelCollection.UpdateByID(context.TODO(), channelId, update, options)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -133,6 +134,28 @@ func ChannelInfo(API string) {
 			fmt.Println("New document inserted!")
 		} else {
 			fmt.Println("Existing document updated!")
+		}
+
+		// Stats section
+		// first get timestamps
+		currentTime := time.Now()
+
+		// prepare data to store
+		stats := bson.M{
+			currentTime.Format(time.RFC3339): map[string]interface{}{
+				"ViewCount":             channelModel.Statistics.ViewCount,
+				"SubscriberCount":       channelModel.Statistics.SubscriberCount,
+				"HiddenSubscriberCount": channelModel.Statistics.HiddenSubscriberCount,
+				"VideoCount":            channelModel.Statistics.VideoCount},
+		}
+
+		// Define the update to apply if the document exists
+		update = bson.M{"$set": stats}
+
+		_, err = statsCollection.UpdateByID(context.TODO(), channelId, update, options)
+
+		if err != nil {
+			panic(err)
 		}
 
 	}
