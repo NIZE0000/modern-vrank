@@ -30,7 +30,7 @@ func init() {
 		fmt.Println("MONGO_URI: Not found")
 	}
 	// Get the GOOGLE_API_KEY form environment variable
-	googleAPIKey, exists := os.LookupEnv("GOOGLE_API_KEY")
+	googleAPIKey, exists = os.LookupEnv("GOOGLE_API_KEY")
 	if exists {
 		fmt.Println("GOOGLE_API_KEY: ", googleAPIKey)
 	} else {
@@ -40,7 +40,6 @@ func init() {
 }
 
 func main() {
-	googleAPIKey, _ := os.LookupEnv("GOOGLE_API_KEY")
 
 	//run script to fetch the data
 	tasks.ChannelInfo(googleAPIKey)

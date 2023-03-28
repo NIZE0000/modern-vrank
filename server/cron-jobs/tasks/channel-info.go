@@ -136,17 +136,17 @@ func ChannelInfo(API string) {
 			fmt.Println("Existing document updated!")
 		}
 
-		// Stats section
+		// ---Stats section---
+
 		// first get timestamps
 		currentTime := time.Now()
 
 		// prepare data to store
 		stats := bson.M{
-			currentTime.Format(time.RFC3339): map[string]interface{}{
-				"ViewCount":             channelModel.Statistics.ViewCount,
-				"SubscriberCount":       channelModel.Statistics.SubscriberCount,
-				"HiddenSubscriberCount": channelModel.Statistics.HiddenSubscriberCount,
-				"VideoCount":            channelModel.Statistics.VideoCount},
+			currentTime.Format("2006-01-02"): map[string]interface{}{
+				"ViewCount":       channelModel.Statistics.ViewCount,
+				"SubscriberCount": channelModel.Statistics.SubscriberCount,
+				"VideoCount":      channelModel.Statistics.VideoCount},
 		}
 
 		// Define the update to apply if the document exists
