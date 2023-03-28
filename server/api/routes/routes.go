@@ -13,10 +13,10 @@ func SetupRoutes() *gin.Engine {
 	{
 		// channel routes
 		v1.GET("channel", controllers.ListChannel)
-		v1.POST("channel", controllers.AddChannel)
+		// v1.POST("channel", controllers.AddChannel)
 		v1.GET("channel/:id", controllers.GetOneChannel)
-		v1.PUT("channel/:id", controllers.PutOneChannel)
-		v1.DELETE("channel/:id", controllers.DeleteChannel)
+		// v1.PUT("channel/:id", controllers.PutOneChannel)
+		// v1.DELETE("channel/:id", controllers.DeleteChannel)
 
 	}
 
