@@ -87,7 +87,29 @@ func AddChannel(c *gin.Context) {
 
 func GetOneChannel(c *gin.Context) {
 
-	// id := c.Params.ByName("id")
+	id := c.Params.ByName("id")
+
+	// connect to mongo database
+	_, db, err := modules.ConnectDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	collection := db.Collection("channel")
+
+	filter := bson.M{
+		"channelId": id,
+		"updateAt": bson.M{
+			"$exists": true,
+		},
+	}
+
+	opts := options.FindOne()
+	cursor := collection.FindOne(context.TODO(), filter, opts)
+	var document bson.M
+	cursor.Decode(&document)
+
+	c.JSON(http.StatusOK, gin.H{"result": document})
 
 }
 
