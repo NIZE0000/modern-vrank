@@ -17,7 +17,7 @@ func ConnectDB() (*mongo.Client, *mongo.Database, error) {
 	// Get the MONGO_URI form environment variable
 	mongoURI, exists = os.LookupEnv("MONGO_URI")
 	if exists {
-		fmt.Println("MONGO_URI: ", mongoURI)
+		// fmt.Println("MONGO_URI: ", mongoURI)
 	} else {
 		fmt.Println("MONGO_URI: Not found")
 	}

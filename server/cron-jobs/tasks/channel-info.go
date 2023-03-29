@@ -133,7 +133,7 @@ func ChannelInfo(API string) {
 		if result.UpsertedCount == 1 {
 			fmt.Println("New document inserted!")
 		} else {
-			fmt.Println("Existing document updated!")
+			//fmt.Println("Existing document updated!")
 		}
 
 		// ---Stats section---
