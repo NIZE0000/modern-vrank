@@ -108,6 +108,8 @@ func ChannelInfo(API string) {
 		// Map localized
 		channelModel.Localized.Title = channelJson.Items[0].Snippet.Localized.Title
 		channelModel.Localized.Description = channelJson.Items[0].Snippet.Localized.Description
+		channelModel.Localized.Country = channelJson.Items[0].Snippet.Localized.Country
+
 		// Map statistics
 		channelModel.Statistics.ViewCount = channelJson.Items[0].Statistics.ViewCount
 		channelModel.Statistics.SubscriberCount = channelJson.Items[0].Statistics.SubscriberCount

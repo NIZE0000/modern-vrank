@@ -27,6 +27,7 @@ func ListChannel(c *gin.Context) {
 	sort := c.DefaultQuery("sort", "channelId")
 	order := c.DefaultQuery("order", "asc")
 	name := c.Query("name")
+	local := c.Query("local")
 
 	// limit exceeded 50
 	if limit >= 50 {
@@ -58,6 +59,9 @@ func ListChannel(c *gin.Context) {
 	}
 	if name != "" {
 		filter["title"] = bson.M{"$regex": name, "$options": "i"}
+	}
+	if local != "" {
+		filter["localized"] = bson.M{"country": local, "$options": "i"}
 	}
 
 	opts := options.Find().SetSort(sortCriteria).SetSkip(offset).SetLimit(limit)

@@ -26,11 +26,12 @@ type ChannelModel struct {
 	Localized struct {
 		Title       string `bson:"title,omitempty"`
 		Description string `bson:"description,omitempty"`
+		Country     string `bson:"country"`
 	} `bson:"localized,omitempty"`
 	Statistics struct {
 		ViewCount             string `bson:"viewCount,omitempty"`
 		SubscriberCount       string `bson:"subscriberCount,omitempty"`
-		HiddenSubscriberCount bool   `bson:"hiddenSubscriberCount,omitempty"`
+		HiddenSubscriberCount bool   `bson:"hiddenSubscriberCount"`
 		VideoCount            string `bson:"videoCount,omitempty"`
 	} `bson:"statistics,omitempty"`
 	UpdateAt primitive.DateTime `bson:"updateAt,omitempty"`
@@ -73,6 +74,7 @@ type ChannelJson struct {
 			Localized struct {
 				Title       string `json:"title"`
 				Description string `json:"description"`
+				Country     string `json:"country"`
 			} `json:"localized"`
 		} `json:"snippet"`
 		Statistics struct {
