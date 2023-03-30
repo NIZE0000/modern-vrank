@@ -34,7 +34,7 @@ func ChannelInfo(API string) {
 
 	//precalculate outdate time UTC
 	lastDay := time.Now().UTC().Truncate(24 * time.Hour)
-	fmt.Printf("Timestamp of date's start: %d\n", lastDay.Day())
+	fmt.Printf("number of date: %d\n", lastDay.Day())
 
 	// filter outdate time
 	filter := bson.M{"updateAt": bson.M{"$lt": lastDay}}

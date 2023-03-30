@@ -10,7 +10,10 @@ COPY . .
 RUN go mod download
 
 # Build the application
-RUN go build -o cron-jobs ./cmd/main/main.go 
+RUN go build -o vrank-api ./cmd/main/main.go 
+
+# Expose the port that the application will listen on
+EXPOSE 8080
 
 # Start the application when the container starts
-CMD ["./cron-jobs"]
+CMD ["./vrank-api"]

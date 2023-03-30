@@ -24,7 +24,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: test123
     volumes:
-      - mongo-data:/data/db
+      - vrank-data:/data/db
     ports:
       - 27017:27017
 
@@ -39,4 +39,4 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:test123@mongo:27017/
 
 volumes:
-  mongo-data:
+  vrank-data:

@@ -34,11 +34,14 @@ func init() {
 		fmt.Println("GOOGLE_API_KEY: Not found")
 
 	}
+
+	// Set the log output to stdout
+	log.SetOutput(os.Stdout)
 }
 
 func main() {
 
-	// make instance cron jobs
+	// make instance for cron jobs
 	c := cron.New()
 
 	// get environment variable
@@ -49,10 +52,9 @@ func main() {
 		// script to fetch the data
 		tasks.ChannelInfo(googleAPIKey)
 	})
-	c.AddFunc(SCHEDULE_CHANNEL_INFO, func() {
-		// script to fetch the data
-		// tasks.VideoStatusAPI(googleAPIKey)
-	})
+	// c.AddFunc("", func() {
+	// 	tasks.VideoStatusAPI(googleAPIKey)
+	// })
 
 	// Start the scheduler
 	c.Start()
