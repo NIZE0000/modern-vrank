@@ -32,8 +32,8 @@ func ChannelInfo(API string) {
 	channelCollection := db.Collection("channel")
 	statsCollection := db.Collection("stats")
 
-	//precalculate outdate time
-	lastDay := time.Now().Truncate(24 * time.Hour)
+	//precalculate outdate time UTC
+	lastDay := time.Now().UTC().Truncate(24 * time.Hour)
 	fmt.Printf("Timestamp of date's start: %d\n", lastDay.Day())
 
 	// filter outdate time
@@ -115,8 +115,8 @@ func ChannelInfo(API string) {
 		channelModel.Statistics.SubscriberCount = channelJson.Items[0].Statistics.SubscriberCount
 		channelModel.Statistics.HiddenSubscriberCount = channelJson.Items[0].Statistics.HiddenSubscriberCount
 		channelModel.Statistics.VideoCount = channelJson.Items[0].Statistics.VideoCount
-		// Timestamp
-		channelModel.UpdateAt = primitive.NewDateTimeFromTime(time.Now())
+		// Timestamp UTC
+		channelModel.UpdateAt = primitive.NewDateTimeFromTime(time.Now().UTC())
 
 		// Define the update to apply if the document exists
 		update := bson.M{"$set": channelModel}
@@ -135,13 +135,13 @@ func ChannelInfo(API string) {
 		if result.UpsertedCount == 1 {
 			fmt.Println("New document inserted!")
 		} else {
-			//fmt.Println("Existing document updated!")
+			// fmt.Println("Existing document updated!")
 		}
 
 		// ---Stats section---
 
 		// first get timestamps
-		currentTime := time.Now()
+		currentTime := time.Now().UTC()
 
 		// prepare data to store
 		stats := bson.M{

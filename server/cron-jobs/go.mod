@@ -4,6 +4,8 @@ go 1.19
 
 require github.com/joho/godotenv v1.5.1
 
+require github.com/robfig/cron/v3 v3.0.1 // indirect
+
 require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect

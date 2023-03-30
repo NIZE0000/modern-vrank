@@ -1,16 +1,13 @@
 package main
 
 import (
+	"cron-jobs/tasks"
 	"fmt"
 	"log"
 	"os"
 
-	// "time"
-
-	// "github.com/go-co-op/gocron"
 	"github.com/joho/godotenv"
-
-	"cron-jobs/tasks"
+	"github.com/robfig/cron/v3"
 )
 
 var googleAPIKey string
@@ -41,8 +38,25 @@ func init() {
 
 func main() {
 
-	//run script to fetch the data
-	tasks.ChannelInfo(googleAPIKey)
-	// tasks.VideoStatusAPI(googleAPIKey)
+	// make instance cron jobs
+	c := cron.New()
 
+	// get environment variable
+	SCHEDULE_CHANNEL_INFO, _ := os.LookupEnv("SCHEDULE_CHANNEL_INFO")
+
+	// Add a job to the scheduler
+	c.AddFunc(SCHEDULE_CHANNEL_INFO, func() {
+		// script to fetch the data
+		tasks.ChannelInfo(googleAPIKey)
+	})
+	c.AddFunc(SCHEDULE_CHANNEL_INFO, func() {
+		// script to fetch the data
+		// tasks.VideoStatusAPI(googleAPIKey)
+	})
+
+	// Start the scheduler
+	c.Start()
+
+	// use select to implement infinty loop
+	select {}
 }

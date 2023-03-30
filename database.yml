@@ -3,12 +3,26 @@ version: '3.1'
 
 services:
 
+  cron-jobs:
+    build: /home/nice/Workspace/modern-vrank/server/cron-jobs
+    environment:
+      GOOGLE_API_KEY: AIzaSyBRl_hLGekUL-5F7DBoFE61LKQSABFCnS8
+      MONGO_URI: mongodb://root:test123@localhost:27017
+      SCHEDULE_CHANNEL_INFO: '*/15 * * * *'
+
+  vrank-api:
+    build: /home/nice/Workspace/modern-vrank/server/api
+    environment:
+      MONGO_URI: mongodb://root:test123@localhost:27017
+    ports:
+      - 8080:8080
+
   mongo:
     image: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_PASSWORD: test123
     volumes:
       - mongo-data:/data/db
     ports:
@@ -21,8 +35,8 @@ services:
       - 8081:8081
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_MONGODB_ADMINPASSWORD: test123
+      ME_CONFIG_MONGODB_URL: mongodb://root:test123@mongo:27017/
 
 volumes:
   mongo-data:
