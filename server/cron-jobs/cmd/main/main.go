@@ -57,7 +57,7 @@ func main() {
 	// })
 
 	// Start the scheduler
-	c.Start()
+	go c.Start()
 
 	// use select to implement infinty loop
 	select {}
