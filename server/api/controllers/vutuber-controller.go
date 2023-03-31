@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"vrank-api/models"
 	"vrank-api/modules"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +28,7 @@ func ListChannel(c *gin.Context) {
 	sort := c.DefaultQuery("sort", "channelId")
 	order := c.DefaultQuery("order", "asc")
 	name := c.Query("name")
-	local := c.Query("local")
+	country := c.Query("country")
 
 	// limit exceeded 50
 	if limit >= 50 {
@@ -60,8 +61,8 @@ func ListChannel(c *gin.Context) {
 	if name != "" {
 		filter["title"] = bson.M{"$regex": name, "$options": "i"}
 	}
-	if local != "" {
-		filter["localized"] = bson.M{"country": local, "$options": "i"}
+	if country != "" {
+		filter["country"] = bson.M{"$regex": country, "$options": "i"}
 	}
 
 	opts := options.Find().SetSort(sortCriteria).SetSkip(offset).SetLimit(limit)
@@ -72,9 +73,9 @@ func ListChannel(c *gin.Context) {
 	defer cursor.Close(context.Background())
 
 	// Loop through the cursor and append the documents to a slice
-	var documents []bson.M
+	var documents []models.Channel
 	for cursor.Next(context.Background()) {
-		var document bson.M
+		var document models.Channel
 		if err := cursor.Decode(&document); err != nil {
 			// Handle error
 			fmt.Println(err)
