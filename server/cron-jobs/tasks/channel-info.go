@@ -37,7 +37,12 @@ func ChannelInfo(API string) {
 	fmt.Printf("number of date: %d\n", lastDay.Day())
 
 	// filter outdate time
-	filter := bson.M{"updateAt": bson.M{"$lt": lastDay}}
+	filter := bson.M{
+		"$or": []bson.M{
+			bson.M{"updateAt": bson.M{"$lt": lastDay}},
+			bson.M{"updateAt": bson.M{"$exists": false}},
+		},
+	}
 	// set docs limit to 50
 	opts := options.Find().SetLimit(50)
 

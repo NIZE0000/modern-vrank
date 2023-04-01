@@ -30,6 +30,14 @@ func ListChannel(c *gin.Context) {
 	name := c.Query("name")
 	country := c.Query("country")
 
+	// Set default values for query parameters
+	if sort == "" {
+		sort = "channelId"
+	}
+	if order == "" {
+		order = "asc"
+	}
+
 	// limit exceeded 50
 	if limit >= 50 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Limit parameter exceeds maximum allowed value"})
@@ -38,11 +46,20 @@ func ListChannel(c *gin.Context) {
 
 	// Define criteria for Ascend and Descend
 	var sortCriteria bson.M
+	stats := "statistics" + "." + sort
 	if order == "asc" {
-		sortCriteria = bson.M{sort: 1}
+		if sort == "viweCount" || sort == "subscriberCount" || sort == "videoCount" {
+			sortCriteria = bson.M{stats: 1}
+		} else {
+			sortCriteria = bson.M{sort: 1}
+		}
 	}
 	if order == "dsc" {
-		sortCriteria = bson.M{sort: -1}
+		if sort == "viweCount" || sort == "subscriberCount" || sort == "videoCount" {
+			sortCriteria = bson.M{stats: -1}
+		} else {
+			sortCriteria = bson.M{sort: -1}
+		}
 	}
 
 	// connect to mongo database
@@ -57,6 +74,7 @@ func ListChannel(c *gin.Context) {
 		"updateAt": bson.M{
 			"$exists": true,
 		},
+		"statistics.hiddenSubscriberCount": false,
 	}
 	if name != "" {
 		filter["title"] = bson.M{"$regex": name, "$options": "i"}
@@ -75,12 +93,25 @@ func ListChannel(c *gin.Context) {
 	// Loop through the cursor and append the documents to a slice
 	var documents []models.Channel
 	for cursor.Next(context.Background()) {
-		var document models.Channel
+		var document models.ChannelBson // for maping data from database
+		var channel models.Channel      //for prepare data to return
 		if err := cursor.Decode(&document); err != nil {
 			// Handle error
 			fmt.Println(err)
 		}
-		documents = append(documents, document)
+		channel.ChannelID = document.ChannelID
+		channel.Title = document.Title
+		channel.Description = document.Description
+		channel.Thumbnails.Default.URL = document.Thumbnails.Default.URL
+		channel.Thumbnails.Medium.URL = document.Thumbnails.Medium.URL
+		channel.Thumbnails.High.URL = document.Thumbnails.High.URL
+		channel.Country = document.Country
+		channel.Statistics.HiddenSubscriberCount = document.Statistics.HiddenSubscriberCount
+		channel.Statistics.SubscriberCount = document.Statistics.SubscriberCount
+		channel.Statistics.VideoCount = document.Statistics.VideoCount
+		channel.Statistics.ViewCount = document.Statistics.ViewCount
+
+		documents = append(documents, channel)
 	}
 
 	c.JSON(http.StatusOK, gin.H{"results": documents})
@@ -111,7 +142,7 @@ func GetOneChannel(c *gin.Context) {
 
 	opts := options.FindOne()
 	cursor := collection.FindOne(context.TODO(), filter, opts)
-	var document bson.M
+	var document models.Channel
 	cursor.Decode(&document)
 
 	c.JSON(http.StatusOK, gin.H{"result": document})
