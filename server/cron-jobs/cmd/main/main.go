@@ -50,6 +50,7 @@ func main() {
 	// Add a job to the scheduler
 	c.AddFunc(SCHEDULE_CHANNEL_INFO, func() {
 		// script to fetch the data
+		log.Fatalln("---Start ChannelInfo Script---")
 		tasks.ChannelInfo(googleAPIKey)
 	})
 	// c.AddFunc("", func() {

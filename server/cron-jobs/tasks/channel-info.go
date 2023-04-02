@@ -102,6 +102,11 @@ func ChannelInfo(API string) {
 		// condition for skip emty data slice
 		if channelJson.Items == nil {
 			log.Fatalln("Emty ID: " + channelId)
+			result, err := channelCollection.DeleteOne(context.TODO(), bson.M{"_id": channelId})
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Printf("DeleteOne removed %v document(s)\n", result.DeletedCount)
 			continue
 		}
 
