@@ -102,6 +102,7 @@ func ListChannel(c *gin.Context) {
 		channel.ChannelID = document.ChannelID
 		channel.Title = document.Title
 		channel.Description = document.Description
+		channel.PublishedAt = document.PublishedAt
 		channel.Thumbnails.Default.URL = document.Thumbnails.Default.URL
 		channel.Thumbnails.Medium.URL = document.Thumbnails.Medium.URL
 		channel.Thumbnails.High.URL = document.Thumbnails.High.URL

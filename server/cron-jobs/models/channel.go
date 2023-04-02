@@ -8,10 +8,11 @@ import (
 
 // Database maping
 type ChannelModel struct {
-	ID          string `bson:"_id,omitempty"`
-	ChannelID   string `bson:"channelId,omitempty"`
-	Title       string `bson:"title,omitempty"`
-	Description string `bson:"description,omitempty"`
+	ID          string             `bson:"_id,omitempty"`
+	ChannelID   string             `bson:"channelId,omitempty"`
+	Title       string             `bson:"title,omitempty"`
+	Description string             `bson:"description,omitempty"`
+	PublishedAt primitive.DateTime `bson:"publishedAt,omitempty"`
 	Thumbnails  struct {
 		Default struct {
 			URL string `bson:"url,omitempty"`

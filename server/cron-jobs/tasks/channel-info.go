@@ -106,6 +106,7 @@ func ChannelInfo(API string) {
 		channelModel.ChannelID = channelJson.Items[0].ID
 		channelModel.Title = channelJson.Items[0].Snippet.Title
 		channelModel.Description = channelJson.Items[0].Snippet.Description
+		channelModel.PublishedAt = primitive.NewDateTimeFromTime(channelJson.Items[0].Snippet.PublishedAt)
 		// Map thumbnails
 		channelModel.Thumbnails.Default.URL = channelJson.Items[0].Snippet.Thumbnails.Default.URL
 		channelModel.Thumbnails.Medium.URL = channelJson.Items[0].Snippet.Thumbnails.Medium.URL

@@ -4,9 +4,10 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 // Model for return data to json
 type Channel struct {
-	ChannelID   string `bson:"channelId,omitempty" json:"channelId"`
-	Title       string `bson:"title,omitempty" json:"title"`
-	Description string `bson:"description,omitempty" json:"description"`
+	ChannelID   string             `bson:"channelId,omitempty" json:"channelId"`
+	Title       string             `bson:"title,omitempty" json:"title"`
+	Description string             `bson:"description,omitempty" json:"description"`
+	PublishedAt primitive.DateTime `bson:"publishedAt,omitempty" json:"publishedAt"`
 	Thumbnails  struct {
 		Default struct {
 			URL string `bson:"url,omitempty" json:"url"`
@@ -29,10 +30,11 @@ type Channel struct {
 
 // Model for maping database
 type ChannelBson struct {
-	ID          string `bson:"_id,omitempty"`
-	ChannelID   string `bson:"channelId,omitempty"`
-	Title       string `bson:"title,omitempty"`
-	Description string `bson:"description,omitempty"`
+	ID          string             `bson:"_id,omitempty"`
+	ChannelID   string             `bson:"channelId,omitempty"`
+	Title       string             `bson:"title,omitempty"`
+	Description string             `bson:"description,omitempty"`
+	PublishedAt primitive.DateTime `bson:"publishedAt,omitempty"`
 	Thumbnails  struct {
 		Default struct {
 			URL string `bson:"url,omitempty"`
