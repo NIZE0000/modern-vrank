@@ -99,10 +99,15 @@ func ChannelInfo(API string) {
 			log.Fatal(err)
 		}
 
+		// condition for skip emty data slice
+		if channelJson.Items == nil {
+			log.Fatalln("Emty ID: " + channelId)
+			continue
+		}
+
 		// define variable for mapping json data
 		var channelModel models.ChannelModel
 		// map json to struct
-		// channelModel.ID = channelJson.Items[0].ID
 		channelModel.ChannelID = channelJson.Items[0].ID
 		channelModel.Title = channelJson.Items[0].Snippet.Title
 		channelModel.Description = channelJson.Items[0].Snippet.Description

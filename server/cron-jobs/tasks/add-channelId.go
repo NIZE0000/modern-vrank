@@ -55,9 +55,7 @@ func T() {
 	// options := options.Update().SetUpsert(true)
 
 	for i, s := range stringsList {
-		_, err = channelCollection.InsertOne(context.TODO(), bson.M{"_id": s})
+		_, _ = channelCollection.InsertOne(context.TODO(), bson.M{"_id": s})
 		fmt.Println(i)
-		fmt.Println(err)
-
 	}
 }
