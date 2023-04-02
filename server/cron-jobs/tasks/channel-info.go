@@ -39,8 +39,8 @@ func ChannelInfo(API string) {
 	// filter outdate time
 	filter := bson.M{
 		"$or": []bson.M{
-			bson.M{"updateAt": bson.M{"$lt": lastDay}},
-			bson.M{"updateAt": bson.M{"$exists": false}},
+			{"updateAt": bson.M{"$lt": lastDay}},
+			{"updateAt": bson.M{"$exists": false}},
 		},
 	}
 	// set docs limit to 50

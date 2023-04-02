@@ -2,7 +2,7 @@ package models
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-// Model for return data
+// Model for return data to json
 type Channel struct {
 	ChannelID   string `bson:"channelId,omitempty" json:"channelId"`
 	Title       string `bson:"title,omitempty" json:"title"`
