@@ -6,7 +6,7 @@ import (
 	"cron-jobs/models"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -30,10 +30,10 @@ func VideoStatusAPI(API string) {
 	}
 
 	// Read the response body
-	data, _ := ioutil.ReadAll(res.Body)
+	data, _ := io.ReadAll(res.Body)
 
 	// Unmarshal the JSON data into a Go struct
-	var video models.Video
+	var video models.VideoJson
 	json.Unmarshal(data, &video)
 
 	// Print the video information

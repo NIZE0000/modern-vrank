@@ -2,7 +2,12 @@ package models
 
 import "time"
 
-type Video struct {
+// Database maping
+type VideoModel struct {
+}
+
+// Json maping
+type VideoJson struct {
 	Kind  string `json:"kind"`
 	Etag  string `json:"etag"`
 	Items []struct {

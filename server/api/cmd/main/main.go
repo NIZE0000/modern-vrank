@@ -1,17 +1,21 @@
 package main
 
 import (
-	"net/http"
+	"log"
+	"vrank-api/routes"
 
-	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
+func init() {
+	// loads values from .env into the system environment
+	if err := godotenv.Load("/home/nice/Workspace/modern-vrank/.env"); err != nil {
+		log.Print("No .env file found")
+	}
+
+}
+
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r := routes.SetupRouter()
+	r.Run(":8080") // listen and serve on 0.0.0.0:8080
 }

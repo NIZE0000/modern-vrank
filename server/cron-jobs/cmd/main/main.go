@@ -1,50 +1,66 @@
 package main
 
 import (
-	"context"
-	"fmt"
+	"cron-jobs/tasks"
 	"log"
 	"os"
 
-	// "time"
-
-	// "github.com/go-co-op/gocron"
 	"github.com/joho/godotenv"
-
-	"cron-jobs/tasks"
-
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/robfig/cron/v3"
 )
+
+var googleAPIKey string
 
 // init is invoked before main()
 func init() {
-	// loads values from .env into the system
+
+	// Set the log output to stdout
+	log.SetOutput(os.Stdout)
+
+	// loads values from .env into the system environment
 	if err := godotenv.Load("/home/nice/Workspace/modern-vrank/.env"); err != nil {
-		log.Print("No .env file found")
+		log.Println("No .env file found")
 	}
+
+	// Get the MONGO_URI form environment variable
+	mongoURI, exists := os.LookupEnv("MONGO_URI")
+	if exists {
+		log.Println("MONGO_URI: ", mongoURI)
+	} else {
+		log.Println("MONGO_URI: Not found")
+	}
+	// Get the GOOGLE_API_KEY form environment variable
+	googleAPIKey, exists = os.LookupEnv("GOOGLE_API_KEY")
+	if exists {
+		log.Println("GOOGLE_API_KEY: ", googleAPIKey)
+	} else {
+		log.Println("GOOGLE_API_KEY: Not found")
+
+	}
+
 }
 
 func main() {
-	// Get the GOOGLE_API_KEY environment variable
-	googleAPIKey, exists := os.LookupEnv("GOOGLE_API_KEY")
 
-	if exists {
-		fmt.Println("GOOGLE_API_KEY: ", googleAPIKey)
-	}
+	// make instance for cron jobs
+	c := cron.New()
 
-	// Connect to the MongoDB server
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = client.Connect(context.TODO())
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println(client)
-	defer client.Disconnect(context.TODO())
+	// get environment variable
+	// SCHEDULE_CHANNEL_INFO, _ := os.LookupEnv("SCHEDULE_CHANNEL_INFO")
 
-	tasks.VideoStatusAPI(googleAPIKey)
+	// Add a job to the scheduler
+	c.AddFunc(" */1 * * * *", func() {
+		// script to fetch the data
+		log.Println("---Start ChannelInfo Script---")
+		tasks.ChannelInfo(googleAPIKey)
+	})
+	// c.AddFunc("", func() {
+	// 	tasks.VideoStatusAPI(googleAPIKey)
+	// })
 
+	// Start the scheduler
+	go c.Start()
+
+	// use select to implement infinty loop
+	select {}
 }
