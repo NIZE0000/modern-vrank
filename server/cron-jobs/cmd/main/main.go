@@ -2,7 +2,6 @@ package main
 
 import (
 	"cron-jobs/tasks"
-	"fmt"
 	"log"
 	"os"
 
@@ -14,29 +13,31 @@ var googleAPIKey string
 
 // init is invoked before main()
 func init() {
+
+	// Set the log output to stdout
+	log.SetOutput(os.Stdout)
+
 	// loads values from .env into the system environment
 	if err := godotenv.Load("/home/nice/Workspace/modern-vrank/.env"); err != nil {
-		log.Print("No .env file found")
+		log.Println("No .env file found")
 	}
 
 	// Get the MONGO_URI form environment variable
 	mongoURI, exists := os.LookupEnv("MONGO_URI")
 	if exists {
-		fmt.Println("MONGO_URI: ", mongoURI)
+		log.Println("MONGO_URI: ", mongoURI)
 	} else {
-		fmt.Println("MONGO_URI: Not found")
+		log.Println("MONGO_URI: Not found")
 	}
 	// Get the GOOGLE_API_KEY form environment variable
 	googleAPIKey, exists = os.LookupEnv("GOOGLE_API_KEY")
 	if exists {
-		fmt.Println("GOOGLE_API_KEY: ", googleAPIKey)
+		log.Println("GOOGLE_API_KEY: ", googleAPIKey)
 	} else {
-		fmt.Println("GOOGLE_API_KEY: Not found")
+		log.Println("GOOGLE_API_KEY: Not found")
 
 	}
 
-	// Set the log output to stdout
-	log.SetOutput(os.Stdout)
 }
 
 func main() {
@@ -45,12 +46,12 @@ func main() {
 	c := cron.New()
 
 	// get environment variable
-	SCHEDULE_CHANNEL_INFO, _ := os.LookupEnv("SCHEDULE_CHANNEL_INFO")
+	// SCHEDULE_CHANNEL_INFO, _ := os.LookupEnv("SCHEDULE_CHANNEL_INFO")
 
 	// Add a job to the scheduler
-	c.AddFunc(SCHEDULE_CHANNEL_INFO, func() {
+	c.AddFunc(" */1 * * * *", func() {
 		// script to fetch the data
-		log.Fatalln("---Start ChannelInfo Script---")
+		log.Println("---Start ChannelInfo Script---")
 		tasks.ChannelInfo(googleAPIKey)
 	})
 	// c.AddFunc("", func() {

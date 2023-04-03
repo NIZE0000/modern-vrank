@@ -25,7 +25,7 @@ func ChannelInfo(API string) {
 	// connect to mongo database
 	_, db, err := modules.ConnectDB()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	// define collection
@@ -96,7 +96,7 @@ func ChannelInfo(API string) {
 		// Unmarshal the JSON data into a Go struct
 		var channelJson models.ChannelJson
 		if err := json.Unmarshal(data, &channelJson); err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 		}
 
 		// condition for skip emty data slice
