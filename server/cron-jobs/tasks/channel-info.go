@@ -7,7 +7,6 @@ import (
 	"cron-jobs/models"
 	"cron-jobs/modules"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -34,7 +33,7 @@ func ChannelInfo(API string) {
 
 	//precalculate outdate time UTC
 	lastDay := time.Now().UTC().Truncate(24 * time.Hour)
-	fmt.Printf("number of date: %d\n", lastDay.Day())
+	log.Printf("number of date: %d\n", lastDay.Day())
 
 	// filter outdate time
 	filter := bson.M{
@@ -63,11 +62,11 @@ func ChannelInfo(API string) {
 		res, err := json.Marshal(result.ID)
 		channelLists = append(channelLists, string(res))
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 	}
-	fmt.Println("Channels Batch Size: ", len(channelLists))
-	fmt.Println(channelLists)
+	log.Println("Channels Batch Size: ", len(channelLists))
+	log.Println(channelLists)
 
 	// Define the API endpoint and query parameters
 	endpoint := "https://www.googleapis.com/youtube/v3/channels"
@@ -87,7 +86,7 @@ func ChannelInfo(API string) {
 		// Send a GET request to the API endpoint
 		res, err := http.Get(url)
 		if err != nil {
-			fmt.Printf("The HTTP request failed with error %s\n", err)
+			log.Printf("The HTTP request failed with error %s\n", err)
 		}
 
 		// Read the response body
@@ -96,12 +95,12 @@ func ChannelInfo(API string) {
 		// Unmarshal the JSON data into a Go struct
 		var channelJson models.ChannelJson
 		if err := json.Unmarshal(data, &channelJson); err != nil {
-			fmt.Println(err)
+			log.Println(err)
 		}
 
 		// condition for skip emty data slice
 		if channelJson.Items == nil {
-			log.Fatalln("Emty ID: " + channelId)
+			log.Println("Emty ID: " + channelId)
 			result, err := channelCollection.DeleteOne(context.TODO(), bson.M{"_id": channelId})
 			if err != nil {
 				log.Println(err)
@@ -143,15 +142,15 @@ func ChannelInfo(API string) {
 		// insert document
 		result, err := channelCollection.UpdateByID(context.TODO(), channelId, update, options)
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return
 		}
 
 		// If the document didn't already exist, output a message to that effect
 		if result.UpsertedCount == 1 {
-			fmt.Println("New document inserted!")
+			log.Println("New document inserted!")
 		} else {
-			// fmt.Println("Existing document updated!")
+			// log.Println("Existing document updated!")
 		}
 
 		// ---Stats section---
