@@ -104,9 +104,9 @@ func ChannelInfo(API string) {
 			log.Fatalln("Emty ID: " + channelId)
 			result, err := channelCollection.DeleteOne(context.TODO(), bson.M{"_id": channelId})
 			if err != nil {
-				log.Fatal(err)
+				log.Println(err)
 			}
-			fmt.Printf("DeleteOne removed %v document(s)\n", result.DeletedCount)
+			log.Printf("DeleteOne removed %v document(s)\n", result.DeletedCount)
 			continue
 		}
 
