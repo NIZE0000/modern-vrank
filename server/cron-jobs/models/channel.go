@@ -30,10 +30,10 @@ type ChannelModel struct {
 	} `bson:"localized,omitempty"`
 	Country    string `bson:"country"`
 	Statistics struct {
-		ViewCount             string `bson:"viewCount,omitempty"`
-		SubscriberCount       string `bson:"subscriberCount,omitempty"`
-		HiddenSubscriberCount bool   `bson:"hiddenSubscriberCount"`
-		VideoCount            string `bson:"videoCount,omitempty"`
+		ViewCount             int  `bson:"viewCount,omitempty"`
+		SubscriberCount       int  `bson:"subscriberCount,omitempty"`
+		HiddenSubscriberCount bool `bson:"hiddenSubscriberCount"`
+		VideoCount            int  `bson:"videoCount,omitempty"`
 	} `bson:"statistics,omitempty"`
 	UpdateAt primitive.DateTime `bson:"updateAt,omitempty"`
 }

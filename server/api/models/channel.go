@@ -21,10 +21,10 @@ type Channel struct {
 	} `bson:"thumbnails,omitempty" json:"thumbnails"`
 	Country    string `bson:"country" json:"country"`
 	Statistics struct {
-		ViewCount             string `bson:"viewCount,omitempty" json:"viewCount"`
-		SubscriberCount       string `bson:"subscriberCount,omitempty" json:"subscriberCount"`
-		HiddenSubscriberCount bool   `bson:"hiddenSubscriberCount,omitempty" json:"hiddenSubscriberCount"`
-		VideoCount            string `bson:"videoCount,omitempty" json:"videoCount"`
+		ViewCount             int  `bson:"viewCount,omitempty" json:"viewCount"`
+		SubscriberCount       int  `bson:"subscriberCount,omitempty" json:"subscriberCount"`
+		HiddenSubscriberCount bool `bson:"hiddenSubscriberCount,omitempty" json:"hiddenSubscriberCount"`
+		VideoCount            int  `bson:"videoCount,omitempty" json:"videoCount"`
 	} `bson:"statistics,omitempty" json:"statistics"`
 }
 
@@ -52,10 +52,10 @@ type ChannelBson struct {
 	} `bson:"localized,omitempty"`
 	Country    string `bson:"country"`
 	Statistics struct {
-		ViewCount             string `bson:"viewCount,omitempty"`
-		SubscriberCount       string `bson:"subscriberCount,omitempty"`
-		HiddenSubscriberCount bool   `bson:"hiddenSubscriberCount"`
-		VideoCount            string `bson:"videoCount,omitempty"`
+		ViewCount             int  `bson:"viewCount,omitempty"`
+		SubscriberCount       int  `bson:"subscriberCount,omitempty"`
+		HiddenSubscriberCount bool `bson:"hiddenSubscriberCount"`
+		VideoCount            int  `bson:"videoCount,omitempty"`
 	} `bson:"statistics,omitempty"`
 	UpdateAt primitive.DateTime `bson:"updateAt,omitempty"`
 }

@@ -47,6 +47,7 @@ func ListChannel(c *gin.Context) {
 	// Define criteria for Ascend and Descend
 	var sortCriteria bson.M
 	stats := "statistics" + "." + sort
+	fmt.Print(stats)
 	if order == "asc" {
 		if sort == "viweCount" || sort == "subscriberCount" || sort == "videoCount" {
 			sortCriteria = bson.M{stats: 1}
