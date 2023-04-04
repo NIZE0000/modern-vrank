@@ -46,10 +46,10 @@ func main() {
 	c := cron.New()
 
 	// get environment variable
-	// SCHEDULE_CHANNEL_INFO, _ := os.LookupEnv("SCHEDULE_CHANNEL_INFO")
+	SCHEDULE_CHANNEL_INFO, _ := os.LookupEnv("SCHEDULE_CHANNEL_INFO")
 
 	// Add a job to the scheduler
-	c.AddFunc(" */1 * * * *", func() {
+	c.AddFunc(SCHEDULE_CHANNEL_INFO, func() {
 		// script to fetch the data
 		log.Println("---Start ChannelInfo Script---")
 		tasks.ChannelInfo(googleAPIKey)
