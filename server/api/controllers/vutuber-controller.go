@@ -39,7 +39,7 @@ func ListChannel(c *gin.Context) {
 	}
 
 	// limit exceeded 50
-	if limit >= 50 {
+	if limit > 50 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Limit parameter exceeds maximum allowed value"})
 		return
 	}
