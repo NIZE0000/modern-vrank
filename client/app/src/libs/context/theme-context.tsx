@@ -2,10 +2,16 @@ import { ReactNode, createContext, useState } from "react";
 
 const theme = {
   colors: {
-    primary: "var(--color-primary)",
-    secondary: "var(--color-secondary)",
-    text: "var(--color-text)",
+    primary: 'var(--color-primary)',
+    secondary: 'var(--color-secondary)',
+    text: 'var(--color-text)',
   },
+  main: {
+    background: 'var(--main-background)',
+    search:{
+        
+    }
+  }
 };
 
 export type ThemeType = typeof theme;
