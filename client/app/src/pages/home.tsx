@@ -1,16 +1,13 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
 import { SEO } from "@/components/common/seo";
 import { MainContainer } from "@/components/home/main-container";
 import { MainHeader } from "@/components/home/main-header";
-import { UpdateUsername } from "@/components/home/update-username";
-import { Loading } from "@/components/ui/loading";
-
-const inter = Inter({ subsets: ["latin"] });
+import { ReactElement, ReactNode } from "react";
+import { MainLayout } from "@/components/layout/main-layout";
+import HomeLayout from "@/components/layout/common-layout";
+import RankingBoard from "@/components/ui/ranking-board-item";
 
 export async function getServerSideProps() {
-  const res = await fetch("http://167.71.204.89:8080/api/v1/channel");
+  const res = await fetch("http://167.71.204.89:8080/api/v1/channel?sort=subscriberCount&order=dsc");
   const data = await res.json();
   return {
     props: {
@@ -38,48 +35,38 @@ type channel = {
   };
 };
 
-export default function Home({
-  channels,
-}: {
+type HomeProps = {
   channels: channel[];
-}): JSX.Element {
+};
+export default function Home({ channels }: HomeProps): JSX.Element {
   return (
     <>
       <MainContainer>
         <SEO title="Home / Twitter" />
         <MainHeader
-          useMobileSidebar
           title="Home"
           className="flex items-center justify-between"
-        >
-          <UpdateUsername />
-        </MainHeader>
-        {/* {!isMobile && <Input />}
-        <section className="mt-0.5 xs:mt-0">
-          {loading ? (
-            <Loading className="mt-5" />
-          ) : !data ? (
-            <Error message="Something went wrong" />
-          ) : (
-            <>
-              <AnimatePresence mode="popLayout">
-                {data.map((tweet) => (
-                  <Tweet {...tweet} key={tweet.id} />
-                ))}
-              </AnimatePresence>
-              <LoadMore />
-            </>
-          )}
-        </section> */}
+        ></MainHeader>
+
+        {channels.map((data) => (
+          <RankingBoard
+            key={data.channelId}
+            title={data.title}
+            thumbnail={data.thumbnails.default.url}
+            viewCount={data.statistics.videoCount}
+            subscriberCount={data.statistics.subscriberCount}
+            videoCount={data.statistics.videoCount}
+          />
+        ))}
       </MainContainer>
     </>
   );
 }
 
-// Home.getLayout = (page: ReactElement): ReactNode => (
-//   <ProtectedLayout>
-//     <MainLayout>
-//       <HomeLayout>{page}</HomeLayout>
-//     </MainLayout>
-//   </ProtectedLayout>
-// );
+Home.getLayout = (page: ReactElement): ReactNode => (
+  // <ProtectedLayout>
+  <MainLayout>
+    <HomeLayout>{page}</HomeLayout>
+  </MainLayout>
+  // </ProtectedLayout>
+);

@@ -8,11 +8,11 @@ type ButtonProps = {
 export function Button({ children }: ButtonProps): JSX.Element {
   return (
     <button
-    // className={cn(
-    //   "custom-button main-tab",
-    //   loading && "relative !text-transparent disabled:cursor-wait",
-    //   className
-    // )}
+    className={cn(
+      "custom-button main-tab",
+      // loading && "relative !text-transparent disabled:cursor-wait",
+      // className
+    )}
     // type="button"
     // disabled={isDisabled}
     // ref={ref}
