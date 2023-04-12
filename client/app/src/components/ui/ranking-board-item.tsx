@@ -19,8 +19,8 @@ export default function RankingBoardItem({
 }: RankingBoardProps): JSX.Element {
   return (
     <>
-      <div className="flex items-center pt-2">
-        <div className="relative w-16 h-16 rounded-full overflow-hidden">
+      <div className="flex items-center pt-2 ">
+        <div className="relative w-[64px] h-[64px] rounded-full overflow-hidden">
           <Image src={thumbnail} alt={title} width={100} height={100} />
         </div>
         <div className="ml-4">
@@ -31,6 +31,9 @@ export default function RankingBoardItem({
             {videoCount && ` • ${videoCount} videos`}
             {country && ` • ${country}`}
           </p>
+
+          {/* indicator ranking compare to delay time */}
+
         </div>
       </div>
     </>
