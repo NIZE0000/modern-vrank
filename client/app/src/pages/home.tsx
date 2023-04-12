@@ -4,11 +4,32 @@ import { MainHeader } from "@/components/home/main-header";
 import { ReactElement, ReactNode, useState } from "react";
 import { MainLayout } from "@/components/layout/main-layout";
 import HomeLayout from "@/components/layout/common-layout";
-import RankingBoard from "@/components/ui/ranking-board-item";
-import useSWR, { SWRConfig } from "swr";
+import useSWRInfinite from "swr/infinite";
+import RankingList from "@/components/ui/ranking-list";
+import MyComponent from "@/components/ui/test";
 import { fetchJSON } from "@/libs/fetch";
-import RankingList, { channel } from "@/components/ui/ranking-list";
 export default function Home({}): JSX.Element {
+  const [hasMore, setHasMore] = useState(true);
+  const [query, setQuery] = useState({
+    offset: 0,
+    limit: 25,
+    sort: "subscriberCount",
+    order: "dsc",
+    country: "",
+  });
+  const [channels, setChannels] = useState([]);
+
+  const getKey = (pageIndex: number, previousPageData: any) => {
+    if (previousPageData && !previousPageData.length)
+      return null; // reached the end
+    return `/api/channel?offset=${
+      query.offset + pageIndex * query.limit
+    }&limit=${query.limit}&sort=${query.sort}&order=${query.order}&country=${
+      query.country
+    }`; // SWR key
+  };
+
+  const { data, size, setSize } = useSWRInfinite(getKey, fetchJSON);
 
   return (
     <>
@@ -18,7 +39,8 @@ export default function Home({}): JSX.Element {
           title="Home"
           className="flex items-center justify-between"
         ></MainHeader>
-        <RankingList />
+        <RankingList channels={channels} />
+        {/* <MyComponent/> */}
       </MainContainer>
     </>
   );
