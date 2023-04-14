@@ -2,14 +2,14 @@ import RankingBoardItem from "@/components/ui/ranking-board-item";
 import { SetStateAction, useEffect, useState } from "react";
 import useSWRInfinite from "swr/infinite";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { channel } from "@/libs/models/channel";
-
-type data = { results: channel[] };
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { channel } from "@/lib/models/channel";
+import Index from "@/pages";
 
 // gobal variable
 let channels: channel[] | SetStateAction<any> | null = [];
+
+// gobal function
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 type RankingListProps = {
   offset?: number;
@@ -45,23 +45,55 @@ export default function RankingList({
 
   const { data, size, mutate, setSize } = useSWRInfinite(getKey, fetcher);
 
+  useEffect(() => {
+    const validation = {
+      offset: offset == query.offset ? true : false,
+      limit: limit == query.limit ? true : false,
+      sort: sort == query.sort ? true : false,
+      order: order == query.order ? true : false,
+      country: country == query.country ? true : false,
+    };
+
+    if (
+      !(
+        validation.country &&
+        validation.offset &&
+        validation.limit &&
+        validation.order &&
+        validation.sort
+      )
+    ) {
+      setQuery({
+        offset: offset as number,
+        limit: limit as number,
+        sort: sort as string,
+        order: order as string,
+        country: country as string,
+      });
+      mutate([]);
+    }
+  }, [query, country, limit, offset, order, sort, mutate]);
+
   if (!data) return <div className="flex justify-center">Loading...</div>;
 
-  let totalChanenl = 0;
-  let temData: channel[] | null = [];
-  for (let i = 0; i < data.length; i++) {
-    totalChanenl += data[i].results.length;
-    temData = [...temData, ...data[i].results];
-  }
-  channels = temData;
-
+  let check = false;
+  let channels: channel[] = data
+    .map((e) => {
+      if (e.results == null) {
+        check = true;
+        return [];
+      } else {
+        return [...e?.results];
+      }
+    })
+    .flat();
 
   const handleLoadMore = async () => {
-    setSize((size) => size + 1);
+    setSize(size + 1);
+
     // handle null data to stop query
-    if (channels.slice(-1) == null) {
-      console.log(channels.slice(-1));
-      setHasMore(false);
+    if (check) {
+      setHasMore((hasMore) => false);
     }
   };
 
@@ -71,16 +103,21 @@ export default function RankingList({
         dataLength={channels.length}
         next={handleLoadMore}
         hasMore={hasMore}
-        loader={<div className="flex justify-center p-2">Loading more...</div>}
+        loader={
+          !check && (
+            <div className="flex justify-center p-2">Loading more...</div>
+          )
+        }
       >
-        {data && (
+        {channels && (
           <div className="pl-4 pr-4">
-            {channels.map((data: channel) => (
+            {channels.map((data: channel, Index: number) => (
               <RankingBoardItem
-                key={data.channelId}
+                key={Index + 1}
+                rank={Index + 1}
                 title={data.title}
                 thumbnail={data.thumbnails.default.url}
-                viewCount={data.statistics.videoCount}
+                viewCount={data.statistics.viewCount}
                 subscriberCount={data.statistics.subscriberCount}
                 videoCount={data.statistics.videoCount}
               />

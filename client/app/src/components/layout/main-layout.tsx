@@ -1,4 +1,4 @@
-import { fetchJSON } from "@/libs/fetch";
+import { fetchJSON } from "@/lib/fetch";
 import Sidebar from "../sidebar";
 import { LayoutProps } from "./common-layout";
 import { SWRConfig } from "swr";

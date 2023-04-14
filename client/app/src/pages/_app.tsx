@@ -1,5 +1,5 @@
 import { AppHead } from "@/components/common/app-haed";
-import { ThemeProvider } from "@/libs/context/theme-context";
+import { ThemeProvider } from "@/lib/context/theme-context";
 import "@/styles/globals.scss";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
