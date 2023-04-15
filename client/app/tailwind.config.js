@@ -9,17 +9,20 @@ module.exports = {
     './src/components/**/*.{js,ts,jsx,tsx}',
     './src/app/**/*.{js,ts,jsx,tsx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
       colors: {
+        primary: '#', // Primary brand color
+        secondary: '#', // Secondary brand color
+        background: '#', // Background color for the component
+        text: '#', // Text color for the component
+        border: '#', // Border color for the component
+        hoverBackground: '#', // Background color on hover
+        activeBackground: '#', // Background color on active
         ...mauve,
         ...violet,
-      },
+      }
     },
   },
   plugins: [],

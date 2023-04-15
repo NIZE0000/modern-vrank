@@ -1,14 +1,42 @@
 import Link from "next/link";
 import SidebarMenuItem from "./sidebar-menu-item";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import solid from "@heroicons/react/24/solid";
 import outline from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
+import Button from "@/components/ui/button";
+import { useTheme } from "next-themes";
 
 export default function Sidebar(): JSX.Element {
   const router = useRouter();
   const path = router.asPath;
   const [active, setActive] = useState(path.substring(1));
+  const { systemTheme, theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const renderThemeChanger = () => {
+    if (!mounted) return null;
+
+    const currentTheme = theme === "system" ? systemTheme : theme;
+
+    if (currentTheme === "dark") {
+      return (
+        <Button className="" onClick={() => setTheme("light")}>
+          <outline.SunIcon className="h-7 w-7" />
+        </Button>
+      );
+    } else {
+      return (
+        <Button className="" onClick={() => setTheme("dark")}>
+          <outline.MoonIcon className="h-7 w-7" />
+        </Button>
+      );
+    }
+  };
 
   const checkActive = (page: string): void => {
     setActive(page);
@@ -54,10 +82,14 @@ export default function Sidebar(): JSX.Element {
         >
           <SidebarMenuItem
             text="Live"
-            Icon={active == "live" ?  solid.SignalIcon : outline.SignalIcon}
+            Icon={active == "live" ? solid.SignalIcon : outline.SignalIcon}
             active={active == "live" ? true : false}
           />
         </Link>
+
+        <div className="absolute top-[90vh] right-0 px-2 ">
+          {renderThemeChanger()}
+        </div>
       </div>
     </>
   );

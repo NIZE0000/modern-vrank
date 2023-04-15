@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -14,9 +15,16 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://167.71.204.89:8080/api/v1/:path*'
-      }
+        destination: process.env.API_URL + '/:path*'
+      },
     ]
+  },
+  async redirects() {
+    return [{
+      source: '/',
+      destination: '/home',
+      permanent: true
+    },]
   }
 }
 

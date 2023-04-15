@@ -1,43 +1,48 @@
-import { ReactNode, createContext, useState } from "react";
+// components/ThemeProvider.tsx
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useTheme } from '../utils/useTheme';
 
-const theme = {
-  colors: {
-    primary: 'var(--color-primary)',
-    secondary: 'var(--color-secondary)',
-    text: 'var(--color-text)',
-  },
-  main: {
-    background: 'var(--main-background)',
-    search:{
-        
-    }
-  }
+type ThemeName = 'default' | 'dark';
+
+type ThemeContextType = {
+  themeName: ThemeName;
+  setThemeName: (themeName: ThemeName) => void;
 };
-
-export type ThemeType = typeof theme;
-
-interface ThemeContextType {
-  theme: ThemeType;
-  setTheme: (theme: ThemeType) => void;
-}
 
 export const ThemeContext = createContext<ThemeContextType>({
-  theme,
-  setTheme: () => {},
+  themeName: 'default',
+  setThemeName: () => {},
 });
 
-export const ThemeProvider = ({
-  children,
-}: {
-  children: ReactNode;
-}): JSX.Element => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeType>(theme);
+type Props = {
+  children: React.ReactNode;
+};
 
-  const setTheme = (theme: ThemeType) => setCurrentTheme(theme);
+const THEME_STORAGE_KEY = 'theme';
+
+export default function ThemeProvider({ children }: Props) {
+  const [themeName, setThemeName] = useState<ThemeName>(() => {
+    if (typeof window !== 'undefined') {
+      const storedThemeName = localStorage.getItem(THEME_STORAGE_KEY) as ThemeName;
+      return storedThemeName || 'default';
+    }
+    return 'default';
+  });
+  const theme = useTheme(themeName);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(THEME_STORAGE_KEY, themeName);
+    }
+  }, [themeName]);
 
   return (
-    <ThemeContext.Provider value={{ theme: currentTheme, setTheme }}>
-      {children}
+    <ThemeContext.Provider value={{ themeName, setThemeName }}>
+      <div style={{ color: theme.colors.secondary }}>{children}</div>
     </ThemeContext.Provider>
   );
-};
+}
+
+export function useThemeContext() {
+  return useContext(ThemeContext);
+}

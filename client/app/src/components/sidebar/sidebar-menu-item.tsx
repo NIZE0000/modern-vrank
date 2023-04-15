@@ -13,9 +13,9 @@ export default function SidebarMenuItem({
 }: MenuProps): JSX.Element {
   return (
     <>
-      <div className="hoverEffect flex items-center justify-center xl:justify-start text-lg space-x-3">
+      <div className="hoverEffect flex items-center justify-center xl:justify-start text-lg space-x-2">
         {Icon && <Icon className="h-7 w-7" />}
-        <span className={cn(active && "font-bold", "hidden xl:inline")} >{text}</span>
+        <span className={cn(active && "font-normal", "hidden xl:inline")} >{text}</span>
       </div>
     </>
   );

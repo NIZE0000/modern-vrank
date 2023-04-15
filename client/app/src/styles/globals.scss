@@ -3,35 +3,16 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --main-background: var(--dark-background);
-    --main-search-background: var(--dark-search-background);
-    --main-sidebar-background: var(--dark-sidebar-background);
-    --main-accent: var(--accent-blue);
+  // :root {
+  //   /* default theme */
+  //   --background: white;
+  //   --foreground: black;
+  // }
 
-    --dark-background: 0 0 0;
-    --dim-background: 22 33 44;
-    --light-background: 255 255 255;
-
-    --dark-search-background: 32 35 39;
-    --dim-search-background: 39 51 64;
-    --light-search-background: 239 243 244;
-
-    --dark-sidebar-background: 22 24 28;
-    --dim-sidebar-background: 30 39 50;
-    --light-sidebar-background: 247 249 249;
-
-    --accent-yellow: 255 213 0;
-    --accent-blue: 29 155 240;
-    --accent-pink: 249 26 130;
-    --accent-purple: 120 87 255;
-    --accent-orange: 255 122 0;
-    --accent-green: 0 184 122;
-
-    --color-primary: #0070f3;
-    --color-secondary: #eaeaea;
-    --color-text: #333;
-  }
+  // [data-theme="dark"] {
+  //   --background: black;
+  //   --foreground: white;
+  // }
 
   a,
   input,
@@ -39,10 +20,14 @@
   textarea {
     -webkit-tap-highlight-color: transparent;
   }
+
+  body {
+    @apply bg-white dark:bg-neutral-900;
+  }
 }
 
 @layer components {
   .hoverEffect {
-    @apply cursor-pointer hover:bg-gray-200 rounded-3xl w-[52px] xl:w-auto h-[52px] xl:h-auto xl:p-3 transition duration-500 ease-out;
+    @apply cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 rounded-3xl w-[52px] xl:w-auto h-[52px] xl:h-auto xl:p-3 transition duration-500 ease-out;
   }
 }

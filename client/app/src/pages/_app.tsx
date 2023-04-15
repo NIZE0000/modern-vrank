@@ -1,5 +1,5 @@
 import { AppHead } from "@/components/common/app-haed";
-import { ThemeProvider } from "@/lib/context/theme-context";
+import {ThemeProvider} from "next-themes";
 import "@/styles/globals.scss";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -22,7 +22,7 @@ export default function App({
   return (
     <>
       <AppHead />
-      <ThemeProvider>{getLayout(<Component {...pageProps} />)}</ThemeProvider>
+      <ThemeProvider attribute="class">{getLayout(<Component {...pageProps} />)}</ThemeProvider>
     </>
   );
 }
