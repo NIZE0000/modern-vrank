@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -126,10 +127,10 @@ func ChannelInfo(API string) {
 		channelModel.Country = channelJson.Items[0].Snippet.Country
 
 		// Map statistics
-		channelModel.Statistics.ViewCount = channelJson.Items[0].Statistics.ViewCount
-		channelModel.Statistics.SubscriberCount = channelJson.Items[0].Statistics.SubscriberCount
+		channelModel.Statistics.ViewCount, _ = strconv.Atoi(channelJson.Items[0].Statistics.ViewCount)
+		channelModel.Statistics.SubscriberCount, _ = strconv.Atoi(channelJson.Items[0].Statistics.SubscriberCount)
 		channelModel.Statistics.HiddenSubscriberCount = channelJson.Items[0].Statistics.HiddenSubscriberCount
-		channelModel.Statistics.VideoCount = channelJson.Items[0].Statistics.VideoCount
+		channelModel.Statistics.VideoCount, _ = strconv.Atoi(channelJson.Items[0].Statistics.VideoCount)
 		// Timestamp UTC
 		channelModel.UpdateAt = primitive.NewDateTimeFromTime(time.Now().UTC())
 

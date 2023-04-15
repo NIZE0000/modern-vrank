@@ -39,7 +39,7 @@ func ListChannel(c *gin.Context) {
 	}
 
 	// limit exceeded 50
-	if limit >= 50 {
+	if limit > 50 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Limit parameter exceeds maximum allowed value"})
 		return
 	}
@@ -47,15 +47,16 @@ func ListChannel(c *gin.Context) {
 	// Define criteria for Ascend and Descend
 	var sortCriteria bson.M
 	stats := "statistics" + "." + sort
+	fmt.Print(stats)
 	if order == "asc" {
-		if sort == "viweCount" || sort == "subscriberCount" || sort == "videoCount" {
+		if sort == "viewCount" || sort == "subscriberCount" || sort == "videoCount" {
 			sortCriteria = bson.M{stats: 1}
 		} else {
 			sortCriteria = bson.M{sort: 1}
 		}
 	}
 	if order == "dsc" {
-		if sort == "viweCount" || sort == "subscriberCount" || sort == "videoCount" {
+		if sort == "viewCount" || sort == "subscriberCount" || sort == "videoCount" {
 			sortCriteria = bson.M{stats: -1}
 		} else {
 			sortCriteria = bson.M{sort: -1}

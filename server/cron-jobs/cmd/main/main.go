@@ -44,6 +44,7 @@ func main() {
 
 	// make instance for cron jobs
 	c := cron.New()
+	tasks.ChannelInfo(googleAPIKey)
 
 	// get environment variable
 	SCHEDULE_CHANNEL_INFO, _ := os.LookupEnv("SCHEDULE_CHANNEL_INFO")
