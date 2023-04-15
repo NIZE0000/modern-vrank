@@ -110,16 +110,18 @@ export default function RankingList({
         }
       >
         {channels && (
-          <div className="pl-4 pr-4">
+          <div className="">
             {channels.map((data: channel, Index: number) => (
               <RankingBoardItem
                 key={Index + 1}
                 rank={Index + 1}
                 title={data.title}
                 thumbnail={data.thumbnails.default.url}
-                viewCount={data.statistics.viewCount}
-                subscriberCount={data.statistics.subscriberCount}
-                videoCount={data.statistics.videoCount}
+                viewCount={
+                  query.sort == "viewCount" ? data.statistics.viewCount : undefined
+                }
+                subscriberCount={ query.sort == "subscriberCount" ? data.statistics.subscriberCount : undefined }
+                videoCount={ query.sort == "videoCount" ? data.statistics.videoCount : undefined }
               />
             ))}
           </div>

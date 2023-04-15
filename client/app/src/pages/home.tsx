@@ -17,15 +17,26 @@ export default function Home({}): JSX.Element {
     country: "",
   });
 
-  useEffect(()=>{
-  },[query])
+  useEffect(() => {}, [query]);
 
   return (
     <>
       <MainContainer className="border-l border-r">
         <SEO title="Home / MODERN VRANK" />
-        <MainHeader title="Home" className="flex items-center justify-between">
-          <OptionMenu query={query} setQuery={setQuery}/>
+        <MainHeader
+          title="Home"
+          className="grid grid-rows-2 grid-cols-8 items-center justify-between gap-y-2 "
+        >
+          <div className="flex px-4 justify-end col-span-4">
+            <OptionMenu query={query} setQuery={setQuery} />
+          </div>
+
+          <div className="flex justify-center col-span-1">Rank</div>
+          <div className="flex justify-center col-span-3">Channel</div>
+          <div className="flex col-span-1"></div>
+          <div className="flex justify-center col-span-3">
+            Total {query.sort.replace(/Count/g, "")}
+          </div>
         </MainHeader>
         <RankingList
           limit={query.limit}
@@ -40,9 +51,7 @@ export default function Home({}): JSX.Element {
 }
 
 Home.getLayout = (page: ReactElement): ReactNode => (
-  // <ProtectedLayout>
   <MainLayout>
     <HomeLayout>{page}</HomeLayout>
   </MainLayout>
-  // </ProtectedLayout>
 );
