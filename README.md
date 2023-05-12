@@ -17,10 +17,14 @@
 
 
 ## Features
+Front-end:
 - Strongly typed React components with TypeScript
-- Users can add tweets, like, retweet, and reply
 - Responsive design for mobile, tablet, and desktop
 - DarkMode store value with local storage
+Back-end:
+- Job scheduler fetch data from youtube api
+- store data in Mongodb
+- Gin for http request 
 
 ## Tech 
 Front-end: client side
